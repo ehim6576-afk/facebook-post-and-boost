@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="bn">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- গুগল সার্চের টাইটেল ও বর্ণনা (SEO Meta Tags) -->
+    <title>ফেসবুক পোস্ট এন্ড বুস্ট ডট কম | Facebook Post And Boost</title>
+    <meta name="description" content="ফেসবুক পোস্ট এন্ড বুস্ট ডট কম - বাংলাদেশে বিশ্বস্ত উপায়ে ফেসবুক পোস্ট এবং পেজ বুস্টিং সার্ভিস নিন। সহজে ডিপোজিট ও বুস্টিং সুবিধা গ্রহণ করুন।">
+    <meta name="keywords" content="ফেসবুক পোস্ট এন্ড বুস্ট ডট কম, facebook post and boost, facebook boost bangladesh, ফেসবুক বুস্ট">
+
+    <!-- Social Media (Facebook/Google) Open Graph Tags -->
+    <meta property="og:title" content="ফেসবুক পোস্ট এন্ড বুস্ট ডট কম">
+    <meta property="og:description" content="সহজে ও নিরাপদে ফেসবুক পোস্ট এবং পেজ বুস্টিং সার্ভিস গ্রহণ করুন।">
+    <meta property="og:image" content="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png">
+
+    <!-- Google Search Favicon Icon Link -->
+    <link rel="icon" type="image/png" href="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png">
+    <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png">
+
+    <!-- Dynamic Manifest Single-File Injection -->
+    <script>
+        const manifestData = {
+            "short_name": "পোস্ট এন্ড বুস্ট",
+            "name": "ফেসবুক পোস্ট এন্ড বুস্ট ডট কম",
+            "icons": [
+                {
+                    "src": "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png",
+                    "type": "image/png",
+                    "sizes": "192x192"
+                },
+                {
+                    "src": "https://upload.wikimedia.org/wikipedia/commons/0/05/Facebook_Logo_%282019%29.png",
+                    "type": "image/png",
+                    "sizes": "512x512"
+                }
+            ],
+            "start_url": "./index.html",
+            "background_color": "#ffffff",
+            "theme_color": "#0866ff",
+            "display": "standalone"
+        };
+        const manifestBlob = new Blob([JSON.stringify(manifestData)], { type: 'application/json' });
+        const manifestURL = URL.createObjectURL(manifestBlob);
+        const link = document.createElement('link');
+        link.rel = 'manifest';
+        link.href = manifestURL;
+        document.getElementsByTagName('head')[0].appendChild(link);
+    </script>
+
+    <!-- Firebase SDK Scripts -->
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-firestore-compat.js"></script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #ffffff;
+            color: #000000;
+        }
+
+        /* টপ হেডার বার */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 14px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .header-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .fb-logo-svg {
+            width: 38px;
+            height: 38px;
+            flex-shrink: 0;
+        }
+
+        .brand-text-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .fb-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: #0866ff;
+            line-height: 1;
+            letter-spacing: -0.5px;
+        }
+
+        .fb-subtitle {
+            font-size: 11px;
+            font-weight: 600;
+            color: #65676b;
+            margin-top: 3px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .balance-box {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1c2b33;
+            background-color: #f0f2f5;
+            padding: 6px 12px;
+            border-radius: 20px;
+            white-space: nowrap;
+        }
+
+        .settings-btn {
+            background: #f0f2f5;
+            border: none;
+            border-radius: 50%;
+            width: 36px;
+            height: 36px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .settings-icon {
+            width: 20px;
+            height: 20px;
+            fill: #050505;
+        }
+
+        /* কাস্টম অ্যাপ ডাউনলোড বাটন স্টাইল */
+        .app-install-banner {
+            display: none;
+            background: #e7f0ff;
+            border: 1px solid #0866ff;
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 15px;
+            text-align: center;
+        }
+
+        .install-btn {
+            background-color: #0866ff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(8, 102, 255, 0.3);
+            margin-top: 8px;
+        }
+
+        /* সদস্য ফ্লোটিং বাটন */
+        .member-float-btn {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #0866ff;
+            color: #ffffff;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            box-shadow: 0 4px 15px rgba(8, 102, 255, 0.4);
+            cursor: pointer;
+            z-index: 999;
+        }
+
+        .member-float-btn svg {
+            width: 20px;
+            height: 20px;
+            fill: #ffffff;
+        }
+
+        /* সদস্য পপ-আপ / মোডাল উইন্ডো */
+        .member-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 1000;
+        }
+
+        .member-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background-color: #000000;
+            color: #ffffff;
+            width: 100%;
+            max-width: 500px;
+            height: 88vh;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            padding: 20px;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 -5px 25px rgba(0, 0, 0, 0.8);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            background: #222222;
+            color: #ffffff;
+            border: none;
+            font-size: 18px;
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        /* ১. রেইনবো সতর্কতামূলক বক্স */
+        .rainbow-alert-box {
+            background: linear-gradient(45deg, #ff0000, #00ffd5, #002bfd, #fffb00, #ff00c8);
+            padding: 3px;
+            border-radius: 12px;
+            margin-top: 25px;
+            margin-bottom: 20px;
+        }
+
+        .rainbow-alert-content {
+            background-color: #111111;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .rainbow-alert-content h4 {
+            color: #ff4d4d;
+            font-size: 15px;
+            margin-bottom: 5px;
+        }
+
+        .rainbow-alert-content p {
+            font-size: 12px;
+            color: #e0e0e0;
+            line-height: 1.4;
+        }
+
+        /* ২. রেইনবো বর্ডার নির্দেশনামূলক বক্স */
+        .instruction-rainbow-box {
+            background: linear-gradient(90deg, #ff0000, #ff7300, #fffb00, #00ffd5, #7a00ff, #ff00c8);
+            padding: 2px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .instruction-content {
+            background: linear-gradient(135deg, #0f0202 0%, #300a0a 50%, #170303 100%);
+            padding: 12px 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .instruction-content p {
+            color: #ffcccc;
+            font-size: 12px;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        /* ৩. সাদা রঙের পেমেন্ট বক্স */
+        .payment-white-box {
+            background-color: #ffffff;
+            color: #000000;
+            border-radius: 16px;
+            padding: 16px;
+            margin-bottom: 20px;
+        }
+
+        .gateway-buttons {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .gateway-btn {
+            flex: 1;
+            background-color: #f5f5f5;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 8px 5px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .gateway-btn.active {
+            border-color: #0866ff;
+            background-color: #e7f0ff;
+        }
+
+        .gateway-btn img {
+            width: 32px;
+            height: 32px;
+            object-fit: contain;
+        }
+
+        .gateway-btn span {
+            font-size: 11px;
+            font-weight: bold;
+            color: #333333;
+        }
+
+        .number-display-box {
+            background-color: #f8f9fa;
+            border: 1px dashed #cccccc;
+            border-radius: 10px;
+            padding: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .number-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .number-label {
+            font-size: 11px;
+            color: #666666;
+            font-weight: 600;
+        }
+
+        .number-value {
+            font-size: 16px;
+            font-weight: bold;
+            color: #111111;
+            margin-top: 2px;
+        }
+
+        .copy-btn {
+            background-color: #0866ff;
+            color: #ffffff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- হেডার -->
+    <header class="header">
+        <div class="header-left">
+            <svg class="fb-logo-svg" viewBox="0 0 36 36" fill="none">
+                <path d="M20.1812 35.8701C29.0941 34.7005 36 27.1578 36 18C36 8.05888 27.9411 0 18 0C8.05888 0 0 8.05888 0 18C0 27.1578 6.90592 34.7005 15.8188 35.8701V23.2781H11.2359V18H15.8188V13.9781C15.8188 9.44719 18.5175 6.94688 22.6519 6.94688 C24.6319 6.94688 26.6981 7.30031 26.6981 7.30031V11.7506H24.4172C22.1728 11.7506 21.4734 13.1438 21.4734 14.5734V18H26.4909L25.6888 23.2781H21.4734V35.8701H20.1812Z" fill="#0866FF" />
+                <path d="M25.6888 23.2781L26.4909 18H21.4734V14.5734C21.4734 13.1438 22.1728 11.7506 24.4172 11.7506H26.6981V7.30031C26.6981 7.30031 24.6319 6.94688 22.6519 6.94688C18.5175 6.94688 15.8188 9.44719 15.8188 13.9781V18H11.2359V23.2781H15.8188V35.8701C16.5398 35.9559 17.2652 36 18 36C18.7348 36 19.4602 35.9559 20.1812 35.8701V23.2781H25.6888Z" fill="white" />
+            </svg>
+            <div class="brand-text-container">
+                <span class="fb-title">facebook</span>
+                <span class="fb-subtitle">ফেসবুক পোস্ট এন্ড বুস্ট ডট কম</span>
+            </div>
+        </div>
+
+        <div class="header-right">
+            <div class="balance-box" id="userBalance">TK 00.00</div>
+            <button class="settings-btn" onclick="alert('সেটিংস অপশন')">
+                <svg class="settings-icon" viewBox="0 0 24 24">
+                    <path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.07.62-.07.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6-3.6z" />
+                </svg>
+            </button>
+        </div>
+    </header>
+
+    <!-- অ্যাপ ইনস্টল/ডাউনলোড ব্যানার -->
+    <div class="app-install-banner" id="installBanner">
+        <p style="font-size: 13px; font-weight: bold; color: #0866ff;">মোবাইলে অ্যাপের মতো ব্যবহার করতে ইনস্টল করুন</p>
+        <button class="install-btn" id="installBtn">📲 ইনস্টল / ডাউনলোড অ্যাপ</button>
+    </div>
+
+    <!-- সদস্য ফ্লোটিং বাটন -->
+    <button class="member-float-btn" onclick="openMemberModal()">
+        <svg viewBox="0 0 24 24">
+            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+        </svg>
+        <span>সদস্য</span>
+    </button>
+
+    <!-- সদস্য মোডাল উইন্ডো -->
+    <div class="member-modal" id="memberModal">
+        <div class="modal-content">
+            <button class="close-btn" onclick="closeMemberModal()">&times;</button>
+
+            <!-- ১. রেইনবো সতর্কতামূলক বক্স -->
+            <div class="rainbow-alert-box">
+                <div class="rainbow-alert-content">
+                    <h4>প্রিয় গ্রাহক সাবধানতার সঙ্গে</h4>
+                    <p>ডিপোজিট ও উত্তোলন করুন। ভুল পেমেন্ট উত্তোলন গ্রহণযোগ্য হবে না।</p>
+                </div>
+            </div>
+
+            <!-- ২. লাল-খয়েরি রেইনবো বর্ডার বক্স -->
+            <div class="instruction-rainbow-box">
+                <div class="instruction-content">
+                    <p>পেমেন্ট ও উত্তোলন করার জন্য সঠিক অপশন বেছে নিন অন্যথায় পেমেন্ট বাতিল হবে।</p>
+                </div>
+            </div>
+
+            <!-- ৩. সাদা পেমেন্ট ও নাম্বার বক্স -->
+            <div class="payment-white-box">
+                <div class="gateway-buttons">
+                    <button class="gateway-btn active" id="btnBkash" onclick="selectGateway('bkash')">
+                        <img src="https://raw.githubusercontent.com/bKash-developer/bKash-merchant-API-documents/master/images/bkash_logo.png" alt="bKash">
+                        <span>বিকাশ</span>
+                    </button>
+                    <button class="gateway-btn" id="btnNagad" onclick="selectGateway('nagad')">
+                        <img src="https://download.logo.wine/logo/Nagad/Nagad-Logo.wine.png" alt="Nagad">
+                        <span>নগদ</span>
+                    </button>
+                    <button class="gateway-btn" id="btnRocket" onclick="selectGateway('rocket')">
+                        <img src="https://play-lh.googleusercontent.com/v8Slsz4sQW5Hn-yL0S0K3e14A-L5N6O3Yh8n2l0H1c1I1R1O8j0b2g3" alt="Rocket" onerror="this.src='https://img.icons8.com/color/48/rocket.png'">
+                        <span>রকেট</span>
+                    </button>
+                </div>
+
+                <div class="number-display-box">
+                    <div class="number-info">
+                        <span class="number-label" id="gatewayLabel">বিকাশ পার্সোনাল নম্বর:</span>
+                        <span class="number-value" id="gatewayNumber">Loding...</span>
+                    </div>
+                    <button class="copy-btn" onclick="copyNumber()">কপি</button>
+                </div>
+            </div>
+            
+            <!-- ৪. দ্বিতীয় সাদা বক্স -->
+            <div class="payment-white-box" style="margin-top: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 12px; border-bottom: 1px solid #eeeeee;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <svg class="fb-logo-svg" viewBox="0 0 36 36" style="width: 30px; height: 30px;">
+                            <path d="M20.1812 35.8701C29.0941 34.7005 36 27.1578 36 18C36 8.05888 27.9411 0 18 0C8.05888 0 0 8.05888 0 18C0 27.1578 6.90592 34.7005 15.8188 35.8701V23.2781H11.2359V18H15.8188V13.9781C15.8188 9.44719 18.5175 6.94688 22.6519 6.94688 C24.6319 6.94688 26.6981 7.30031 26.6981 7.30031V11.7506H24.4172C22.1728 11.7506 21.4734 13.1438 21.4734 14.5734V18H26.4909L25.6888 23.2781H21.4734V35.8701H20.1812Z" fill="#0866FF" />
+                        </svg>
+                        <div style="font-size: 13px; font-weight: bold; color: #0866ff; background: #e7f0ff; padding: 4px 10px; border-radius: 15px;" id="modalUserBalance">TK 0.00</div>
+                    </div>
+                    <div style="font-size: 12px; font-weight: 600; color: #444444;" id="modalUserPhone">01700000000</div>
+                </div>
+
+                <div style="display: flex; justify-content: space-around; margin: 15px 0; border-bottom: 1px solid #eeeeee; padding-bottom: 10px;">
+                    <button onclick="switchTab('deposit')" id="tabDeposit" style="background: none; border: none; font-weight: bold; color: #0866ff; cursor: pointer; border-bottom: 2px solid #0866ff; padding-bottom: 4px;">ডিপোজিট</button>
+                    <button onclick="switchTab('withdraw')" id="tabWithdraw" style="background: none; border: none; font-weight: bold; color: #666666; cursor: pointer; padding-bottom: 4px;">উত্তোলন</button>
+                    <button onclick="switchTab('account')" id="tabAccount" style="background: none; border: none; font-weight: bold; color: #666666; cursor: pointer; padding-bottom: 4px;">মাই অ্যাকাউন্ট</button>
+                </div>
+
+                <div id="depositSection" style="display: block;">
+                    <div style="margin-bottom: 10px;">
+                        <input type="number" id="depositAmount" placeholder="টাকার পরিমাণ সিলেক্ট করুন" style="width: 100%; padding: 10px; border: 1px solid #cccccc; border-radius: 8px; font-size: 13px; outline: none;">
+                    </div>
+                    <div style="margin-bottom: 8px;">
+                        <input type="text" id="depositTrxId" placeholder="ট্রানজেকশন আইডি" style="width: 100%; padding: 10px; border: 1px solid #cccccc; border-radius: 8px; font-size: 13px; outline: none;">
+                    </div>
+
+                    <p style="font-size: 11px; color: #666666; margin-bottom: 10px; text-align: center;">সঠিক ট্রানজেকশন আইডি ব্যবহার করুন ওকে বাটন প্রেস করুন</p>
+
+                    <button onclick="submitDeposit()" style="width: 100%; background-color: #0866ff; color: #ffffff; border: none; padding: 10px; border-radius: 8px; font-weight: bold; font-size: 14px; cursor: pointer;">ওকে</button>
+
+                    <p style="font-size: 11px; color: #d9534f; font-weight: bold; text-align: center; margin-top: 12px;">সর্বনিম্ন ১০০ সর্বোচ্চ ৫০ হাজার 💯 50000</p>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        // ১. ফায়ারবেস কনফিগারেশন
+        const firebaseConfig = {
+            apiKey: "AIzaSyDadMeZzjV6zyEznmr6HDMh1thHxKzXYOA",
+            authDomain: "facebook-post-and-boost.firebaseapp.com",
+            projectId: "facebook-post-and-boost",
+            storageBucket: "facebook-post-and-boost.firebasestorage.app",
+            messagingSenderId: "180051966505",
+            appId: "1:180051966505:web:724e8accf9254829447a38",
+            measurementId: "G-CN6HG3K0T9"
+        };
+
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // ২. সার্ভিস ওয়ার্কার ইনস্টলেশন
+        if ('serviceWorker' in navigator) {
+            const swCode = `
+                self.addEventListener('install', (e) => self.skipWaiting());
+                self.addEventListener('fetch', (e) => {});
+            `;
+            const swBlob = new Blob([swCode], { type: 'application/javascript' });
+            const swUrl = URL.createObjectURL(swBlob);
+
+            navigator.serviceWorker.register(swUrl)
+                .then(() => console.log('Single-File Service Worker Registered'))
+                .catch((err) => console.log('Service Worker Error:', err));
+        }
+
+        // ৩. কাস্টম অ্যাপ ইনস্টল প্রম্পট
+        let deferredPrompt;
+        const installBanner = document.getElementById('installBanner');
+        const installBtn = document.getElementById('installBtn');
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            installBanner.style.display = 'block';
+        });
+
+        installBtn.addEventListener('click', async () => {
+            if (!deferredPrompt) return;
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            if (outcome === 'accepted') {
+                installBanner.style.display = 'none';
+            }
+            deferredPrompt = null;
+        });
+
+        window.addEventListener('appinstalled', () => {
+            installBanner.style.display = 'none';
+        });
+
+        // ৪. লিসেনার ও পেমেন্ট নম্বর হ্যান্ডলিং
+        let adminNumbers = { bkash: "লোডিং...", nagad: "লোডিং...", rocket: "লোডিং..." };
+        let currentSelectedGateway = 'bkash';
+
+        function openMemberModal() { document.getElementById("memberModal").classList.add("active"); }
+        function closeMemberModal() { document.getElementById("memberModal").classList.remove("active"); }
+
+        function selectGateway(type) {
+            currentSelectedGateway = type;
+            document.querySelectorAll('.gateway-btn').forEach(btn => btn.classList.remove('active'));
+
+            if (type === 'bkash') {
+                document.getElementById('btnBkash').classList.add('active');
+                document.getElementById('gatewayLabel').innerText = 'বিকাশ পার্সোনাল নম্বর:';
+                document.getElementById('gatewayNumber').innerText = adminNumbers.bkash || 'উপলব্ধ নেই';
+            } else if (type === 'nagad') {
+                document.getElementById('btnNagad').classList.add('active');
+                document.getElementById('gatewayLabel').innerText = 'নগদ পার্সোনাল নম্বর:';
+                document.getElementById('gatewayNumber').innerText = adminNumbers.nagad || 'উপলব্ধ নেই';
+            } else if (type === 'rocket') {
+                document.getElementById('btnRocket').classList.add('active');
+                document.getElementById('gatewayLabel').innerText = 'রকেট পার্সোনাল নম্বর:';
+                document.getElementById('gatewayNumber').innerText = adminNumbers.rocket || 'উপলব্ধ নেই';
+            }
+        }
+
+        function listenPaymentNumbers() {
+            db.collection("app_settings").doc("payment_numbers").onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    adminNumbers.bkash = data.bkash || "নম্বর দেওয়া নেই";
+                    adminNumbers.nagad = data.nagad || "নম্বর দেওয়া নেই";
+                    adminNumbers.rocket = data.rocket || "নম্বর দেওয়া নেই";
+                } else {
+                    db.collection("app_settings").doc("payment_numbers").set({
+                        bkash: "01700000000", nagad: "01800000000", rocket: "01900000000"
+                    });
+                }
+                selectGateway(currentSelectedGateway);
+            });
+        }
+
+        function copyNumber() {
+            const numText = document.getElementById('gatewayNumber').innerText;
+            if (numText && numText !== "Loding..." && numText !== "উপলব্ধ নেই") {
+                navigator.clipboard.writeText(numText).then(() => {
+                    alert("নম্বর কপি হয়েছে: " + numText);
+                });
+            } else {
+                alert("কপি করার মতো নম্বর পাওয়া যায়নি!");
+            }
+        }
+
+        function listenUserBalance(userId) {
+            db.collection("users").doc(userId).onSnapshot((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    const balance = data.balance !== undefined ? data.balance : 0;
+                    document.getElementById("userBalance").innerText = "TK " + balance.toFixed(2);
+                    document.getElementById("modalUserBalance").innerText = "TK " + balance.toFixed(2);
+                }
+            });
+        }
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                listenUserBalance(user.uid);
+                listenPaymentNumbers();
+            } else {
+                auth.signInAnonymously();
+            }
+        });
+
+        function switchTab(tabName) {
+            if (tabName === 'deposit') {
+                document.getElementById('depositSection').style.display = 'block';
+                document.getElementById('tabDeposit').style.color = '#0866ff';
+                document.getElementById('tabDeposit').style.borderBottom = '2px solid #0866ff';
+                document.getElementById('tabWithdraw').style.color = '#666666';
+                document.getElementById('tabWithdraw').style.borderBottom = 'none';
+                document.getElementById('tabAccount').style.color = '#666666';
+                document.getElementById('tabAccount').style.borderBottom = 'none';
+            }
+        }
+
+        function submitDeposit() {
+            const amount = parseFloat(document.getElementById('depositAmount').value);
+            const trxId = document.getElementById('depositTrxId').value.trim();
+            const user = auth.currentUser;
+
+            if (!amount || amount < 100 || amount > 50000) {
+                alert("অনুগ্রহ করে ১০০ টাকা থেকে ৫০,০০০ টাকার মধ্যে সঠিক পরিমাণ লিখুন।");
+                return;
+            }
+            if (!trxId) {
+                alert("অনুগ্রহ করে ট্রানজেকশন আইডি প্রদান করুন।");
+                return;
+            }
+
+            if (user) {
+                db.collection("deposits").add({
+                    userId: user.uid,
+                    amount: amount,
+                    trxId: trxId,
+                    gateway: currentSelectedGateway,
+                    status: "pending",
+                    timestamp: firebase.firestore.FieldValue.serverTimestamp()
+                }).then(() => {
+                    alert("আপনার ডিপোজিট সাকসেসফুল প্রিয় গ্রাহক আপনাদের ধন্যবাদ আমাদের এই অনলাইন সেবাই");
+                    document.getElementById('depositAmount').value = '';
+                    document.getElementById('depositTrxId').value = '';
+                }).catch((error) => {
+                    alert("ত্রুটি দেখা দিয়েছে: " + error.message);
+                });
+            }
+        }
+    </script>
+</body>
+
+</html>
+    
